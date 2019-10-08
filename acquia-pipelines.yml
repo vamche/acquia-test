@@ -1,16 +1,34 @@
-version: 1.1.0
+version: 1.2.0
 
-services:
-  - mysql
-  - php:
-      version: 7.3
-      
 events:
   build:
     steps:
-      - hello:
-          type: script
+      # If you have build instructions, put them here. They are not required fork .
+      - build_site:
           script:
-            - echo "test commit!"
-            - echo "test commit!!!!"
-            - echo "test commit!!!!"
+            - touch docroot/index.html
+            - echo "You successfully deployed your build to an ODE" > docroot/index.html
+
+  post-deploy:
+    steps:
+      # Deploy the build artifact to a Cloud on-demand environment.
+      - deploy:
+          script:
+          - echo "Post deploy"
+          - pipelines-deploy
+
+  # When a GitHub pull request is merged, this deletes the coresponding.
+  pr-merged:
+    steps:
+      - deploy:
+          script:
+            - echo "Pull request merged"
+            - pipelines-deploy
+
+  # When a GitHub pull request is closed, this deletes the coresponding ODE.
+  pr-closed:
+    steps:
+      - deploy:
+          script:
+            - echo "Pull request closed"
+            - pipelines-deploy
