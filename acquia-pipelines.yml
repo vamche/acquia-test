@@ -11,6 +11,5 @@ events:
       - hello:
           type: script
           script:
-            - echo "Hello world!"
-            - sleep 2m
+            - sleep 90s
        
