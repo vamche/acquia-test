@@ -1,34 +1,18 @@
-version: 1.2.0
+version: 1.1.0
 
 events:
   build:
     steps:
-      # If you have build instructions, put them here. They are not required fork .
-      - build_site:
+      - welcome:
           script:
-            - touch docroot/index.html
-            - echo "You successfully deployed your build to an ODE" > docroot/index.html
-
-  post-deploy:
-    steps:
-      # Deploy the build artifact to a Cloud on-demand environment.
-      - deploy:
-          script:
-          - echo "Post deploy"
-          - pipelines-deploy
-
-  # When a GitHub pull request is merged, this deletes the coresponding.
-  pr-merged:
-    steps:
-      - deploy:
-          script:
-            - echo "Pull request merged"
-            - pipelines-deploy
-
-  # When a GitHub pull request is closed, this deletes the coresponding ODE.
-  pr-closed:
-    steps:
-      - deploy:
-          script:
-            - echo "Pull request closed"
-            - pipelines-deploy
+            - echo 'STARTED'
+            - cat /home/local/git_workspace_wrapper
+            - export PIPELINE_SSH_KEY=~/.ssh/aq-bitbucket
+            - git ls-remote git@bitbucket.org:nish-acquia/checklist.git
+            - unset PIPELINE_SSH_KEY
+            - echo 'FINISHED'
+ssh-keys:
+  aq-github:
+    secure: 
+  aq-bitbucket:
+    secure: 
